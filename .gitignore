@@ -104,10 +104,10 @@ venv.bak/
 .mypy_cache/
 
 # doc
-tex/*/*.aux
-tex/*/*.out
-tex/*/*.synctex.gz
-tex/*/*.pdf
+tex/*.aux
+tex/*.out
+tex/*.synctex.gz
+tex/*.pdf
 
 
 
