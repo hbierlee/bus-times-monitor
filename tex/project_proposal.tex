@@ -4,7 +4,7 @@
 
 \pagestyle{empty}
 
-\section*{Project Proposal: Bus Time Monitor (1DT086/1DT032)}
+\section*{Project Proposal: Bus Times Monitor (1DT086/1DT032)}
 
 \emph{Ahmed Hussain, Marta Monoranu, Hendrik Bierlee (Group 10)}
 
@@ -18,20 +18,20 @@ Also, the project is interesting from a technical point of view, because it has 
 \begin{itemize}
 	\item \textbf{Display information} Show and update information (bus line number and departure times) for the bus on Sense HAT LED display
 	\item \textbf{Static data} Read data from a static bus schedule file
-	\item \textbf{User input} Use Sense HAT joystick to switch between different bus-lines and directions
+	\item \textbf{User input} Use Sense HAT joystick to switch between bus lines and directions
 	\item \textbf{Real-time data (optional)} Fetch real-time data from external web service
 \end{itemize}
 	
-\paragraph{How?} We will use Python as the primary programming language, and its Sense HAT API for interacting with the LED display and joystick. We will also (probably) make use of the Google Directions API (if the real-time data feature is added).
+\paragraph{How?} We will use Python as the primary programming language, and its Sense HAT API for interacting with the LED display and joystick. If real-time data is added, we will (probably) make use of the Google Directions API.
 
-\subparagraph{Potential obstacles} A potential obstacle with real-time data is that (according to our preliminary research) Google doesn't seem to expose an API for returning public transit schedule data of a specific place.
-Instead they should be somehow gotten via way of a request for directions from point A to B.
+\subparagraph{Potential obstacles} A potential obstacle with real-time data is that (according to our preliminary research) Google doesn't seem to expose an API that returns the public transit departure schedule of a specific bus stop.
+Instead, they should be somehow gotten via way of a request for directions from point A to B.
 Also, we want to avoid a high billing for these API calls.
 
 \paragraph{When?} We have roughly five weeks to deliver the project, presentation and report:
 
 \begin{itemize}
-	\item \textbf{Week 1 (1/10-7/10)} Project proposal, further research and requirement definition, set-up dev environment (Python, Git, stable domain name for SSH, Sense HAT python API), add display of single bus line departure time
+	\item \textbf{Week 1 (1/10-7/10)} Project proposal, set-up dev environment (Trello, Python, Git, stable domain name for SSH, Sense HAT python API), add display of single bus line departure time
 	\item \textbf{Week 2 (8/10-14/10)} Get and add static bus time schedule, add user input for switching the bus lines, 1st TA meeting, research fetching real-time updates viability
 	\item \textbf{Week 3 (15/10-21/10)} 2nd TA meeting, possibly add real-time updates, start on presentations
 	\item \textbf{Week 4 (22/10-28/10)} Presentations, start on report, finish code
