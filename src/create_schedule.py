@@ -33,8 +33,13 @@ def append_trip_fields_to_schedule(schedule, trips_path=TRIPS_PATH):
 		sorting_key = operator.itemgetter("trip_id")
 		schedule = sorted(schedule, key=sorting_key)  # should already be the case
 		trips = sorted(trips, key=sorting_key)
-		for bus, trip in zip(schedule, trips):
-			bus.update(trip)
+
+		# TODO can be improved by just using zip from the index of the first trip_id match (I think?)
+		tripIndex = 0;
+		for bus in schedule:
+			tripEntry = next({"trip": trip, "index": index} for index, trip in enumerate(trips) if trip["trip_id"] == bus["trip_id"])
+			tripIndex = tripEntry["index"]
+			bus.update(tripEntry["trip"])
 		return schedule
 
 
@@ -44,8 +49,13 @@ def append_route_fields_to_schedule(schedule, routes_path=ROUTES_PATH):
 		sorting_key = operator.itemgetter("route_id")
 		schedule = sorted(schedule, key=sorting_key)
 		routes = sorted(routes, key=sorting_key)  # should already be the case
-		for bus, route in zip(schedule, routes):
-			bus.update(route)
+		
+		# TODO can be improved by just using zip from the index of the first trip_id match (I think?)
+		routeIndex = 0;
+		for bus in schedule:
+			routeEntry = next({"route": route, "index": index} for index, route in enumerate(routes) if route["route_id"] == bus["route_id"])
+			routeIndex = routeEntry["index"]
+			bus.update(routeEntry["route"])
 		return schedule
 
 
@@ -54,7 +64,10 @@ def create_schedule(stop_id):
 	append_trip_fields_to_schedule(schedule)
 	append_route_fields_to_schedule(schedule)
 	schedule = map(lambda bus: sub_dict(bus, SCHEDULE_FIELDNAMES), schedule)
-	write_csv_file(SCHEDULE_DESTINATION_PATH, schedule[0].keys(), schedule)
+
+	# TODO sort by times/route_id??
+
+	write_csv_file(SCHEDULE_DESTINATION_PATH, SCHEDULE_FIELDNAMES, schedule)
 
 create_schedule(UPPSALA_POLACKSBACKEN_STOP_ID)
 
