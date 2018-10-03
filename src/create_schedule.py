@@ -10,8 +10,8 @@ STOP_TIMES_PATH = os.path.join(DATA_PATH, "original/stop_times.txt")
 TRIPS_PATH = os.path.join(DATA_PATH, "original/trips.txt")
 ROUTES_PATH = os.path.join(DATA_PATH, "original/routes.txt")
 
-SCHEDULE_DESTINATION_PATH = os.path.join(DATA_PATH, "schedules/schedule-" + str(time.time()) + ".txt")
-SCHEDULE_FIELDNAMES = ["trip_id","arrival_time","departure_time","stop_id","stop_sequence","pickup_type","drop_off_type", "route_id", "trip_headsign"]
+SCHEDULE_DESTINATION_PATH = os.path.join(DATA_PATH, "schedules/schedule-" + str(int(time.time())) + ".csv")
+SCHEDULE_FIELDNAMES = ["trip_id","departure_time","route_id", "trip_headsign", "route_short_name", "route_long_name"]
 
 def write_csv_file(destination, fieldnames, rows):
 	with open(destination, 'w') as file:
@@ -23,7 +23,6 @@ def sub_dict(somedict, somekeys, default=None):
 	return dict([ (k, somedict.get(k, default)) for k in somekeys ])
 
 def get_stop_times_for_stop_id(stop_id, stop_times_path=STOP_TIMES_PATH):
-	print('get_stop_times_for_stop_id=' + UPPSALA_POLACKSBACKEN_STOP_ID)
 	with open(stop_times_path, 'rb') as csvfile:
 		stop_times = csv.DictReader(csvfile, delimiter=',')
 		return filter(lambda row: row['stop_id'] == stop_id, stop_times)
@@ -37,7 +36,7 @@ def append_trip_fields_to_schedule(schedule, trips_path=TRIPS_PATH):
 		for bus, trip in zip(schedule, trips):
 			bus.update(trip)
 		return schedule
-		
+
 
 def append_route_fields_to_schedule(schedule, routes_path=ROUTES_PATH):
 	with open(routes_path) as routes_file:
@@ -51,13 +50,10 @@ def append_route_fields_to_schedule(schedule, routes_path=ROUTES_PATH):
 
 
 def create_schedule(stop_id):
-	print('get_stop_times_for_stop_id')
 	schedule = get_stop_times_for_stop_id(stop_id)
 	append_trip_fields_to_schedule(schedule)
-	print("append_trip_fields_to_schedule")
 	append_route_fields_to_schedule(schedule)
-	print("append_route_fields_to_schedule")
-	print(schedule)
+	schedule = map(lambda bus: sub_dict(bus, SCHEDULE_FIELDNAMES), schedule)
 	write_csv_file(SCHEDULE_DESTINATION_PATH, schedule[0].keys(), schedule)
 
 create_schedule(UPPSALA_POLACKSBACKEN_STOP_ID)
