@@ -11,7 +11,7 @@ TRIPS_PATH = os.path.join(DATA_PATH, "original/trips.txt")
 ROUTES_PATH = os.path.join(DATA_PATH, "original/routes.txt")
 
 SCHEDULE_DESTINATION_PATH = os.path.join(DATA_PATH, "schedules/schedule-" + str(int(time.time())) + ".csv")
-SCHEDULE_FIELDNAMES = ["trip_id","departure_time","route_id", "trip_headsign", "route_short_name", "route_long_name"]
+SCHEDULE_FIELDNAMES = ["trip_id", "route_id", "route_short_name", "trip_headsign", "departure_time"]
 
 def write_csv_file(destination, fieldnames, rows):
 	with open(destination, 'w') as file:
