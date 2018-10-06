@@ -11,6 +11,7 @@ TRIPS_PATH = os.path.join(DATA_PATH, "trips.txt")
 ROUTES_PATH = os.path.join(DATA_PATH, "routes.txt")
 CALENDAR_PATH = os.path.join(DATA_PATH, "calendar.txt")
 CALENDAR_DATES_PATH = os.path.join(DATA_PATH, "calendar_dates.txt")
+TIMEZONE = "Europe/Stockholm"
 
 SCHEDULES_FOLDER_PATH = os.path.join(DATA_PATH, "schedules/")
 SCHEDULE_FIELDNAMES = [
@@ -20,22 +21,10 @@ SCHEDULE_FIELDNAMES = [
     "route_short_name",
     "trip_headsign",
     "departure_time",
-    "monday",
-    "tuesday",
-    "wednesday",
-    "thursday",
-    "friday",
-    "saturday",
-    "sunday",
-    "start_date",
-    "end_date",
-    "date",
-    "exception_type",
 ]
 
 
-def get_schedule_filename(): "schedule-" + str(int(time.time())) + ".csv"
-
+def get_schedule_filename(): return "schedule-" + str(int(time.time())) + ".csv"
 
 def write_csv_file(destination, fieldnames, rows):
     with open(destination, 'w') as file:
@@ -71,25 +60,45 @@ def inner_join_file_to_schedule(schedule, path, key):
             bus.update(routeEntry["other"])
         return schedule
 
-
-def create_schedule(stop_id):
+def create_schedule(stop_id=UPPSALA_POLACKSBACKEN_STOP_ID):
+    # read and join data
     print("create_schedule")
     schedule = get_stop_times_for_stop_id(stop_id)
     inner_join_file_to_schedule(schedule, TRIPS_PATH, "trip_id")
     inner_join_file_to_schedule(schedule, ROUTES_PATH, "route_id")
-    inner_join_file_to_schedule(schedule, CALENDAR_PATH, "service_id")
-    inner_join_file_to_schedule(schedule, CALENDAR_DATES_PATH, "service_id")
 
-    
+    # clean and sort data
     schedule = map(lambda bus: sub_dict(bus, SCHEDULE_FIELDNAMES), schedule)
+    for bus in schedule:  # make hours always have double digits
+        if len(bus["departure_time"].split(":")[0]) == 1:
+            bus["departure_time"] = "0" + bus["departure_time"]
+
+    schedule = sorted(schedule, key=operator.itemgetter("departure_time"))
+
+    return schedule
+
+def read_schedule(path=SCHEDULES_FOLDER_PATH):
+    with open(os.path.join(path, "schedule-1538856523.csv")) as file: # TODO get latest schedule
+        schedule = csv.DictReader(file, delimiter=',')
+        return list(schedule)
 
 
-    # TODO sort by times/route_id??
+# schedule = create_schedule()
+# write_csv_file(os.path.join(SCHEDULES_FOLDER_PATH, get_schedule_filename()), SCHEDULE_FIELDNAMES, schedule)
+schedule = read_schedule()
+print(schedule)
 
-    write_csv_file(os.path.join(SCHEDULES_FOLDER_PATH,
-                                get_schedule_filename), SCHEDULE_FIELDNAMES, schedule)
+# read_calendar_dates_for_service_ids(map(lambda bus: bus["service_id"], schedule))
 
+# TODO rename file to schedule.py
+# TODO rename bus vars to trip ?
+# TODO old, probably remove
+# def time_string_to_datetime(time_string): 
+#     time_string = map(int, time_string.split(":"))
+#     while (time_string[0] > 23): time_string[0] = time_string[0] - 24 remove
+#     return datetime.time(*time_string)
 
-
-
-
+# TODO maybe remove
+# import datetime
+# def time_string_to_datetime(time_string): return datetime.time(*map(int, time_string.split(":")))
+# def sort_schedule_by_departure_time(schedule): return sorted(schedule, key=lambda bus: time_string_to_datetime(bus["departure_time"]))
