@@ -69,7 +69,7 @@ def create_schedule(stop_id=UPPSALA_POLACKSBACKEN_STOP_ID):
 
     # clean and sort data
     schedule = map(lambda bus: sub_dict(bus, SCHEDULE_FIELDNAMES), schedule)
-    for bus in schedule:  # make hours always have double digits
+    for bus in schedule:  # add zero padding to hours
         if len(bus["departure_time"].split(":")[0]) == 1:
             bus["departure_time"] = "0" + bus["departure_time"]
 
@@ -83,22 +83,22 @@ def read_schedule(path=SCHEDULES_FOLDER_PATH):
         return list(schedule)
 
 
+
 # schedule = create_schedule()
 # write_csv_file(os.path.join(SCHEDULES_FOLDER_PATH, get_schedule_filename()), SCHEDULE_FIELDNAMES, schedule)
-schedule = read_schedule()
-print(schedule)
+# schedule = read_schedule()
 
 # read_calendar_dates_for_service_ids(map(lambda bus: bus["service_id"], schedule))
 
 # TODO rename file to schedule.py
 # TODO rename bus vars to trip ?
 # TODO old, probably remove
-# def time_string_to_datetime(time_string): 
+# def time_string_to_date(time_string): 
 #     time_string = map(int, time_string.split(":"))
 #     while (time_string[0] > 23): time_string[0] = time_string[0] - 24 remove
 #     return datetime.time(*time_string)
 
 # TODO maybe remove
 # import datetime
-# def time_string_to_datetime(time_string): return datetime.time(*map(int, time_string.split(":")))
-# def sort_schedule_by_departure_time(schedule): return sorted(schedule, key=lambda bus: time_string_to_datetime(bus["departure_time"]))
+# def time_string_to_date(time_string): return datetime.time(*map(int, time_string.split(":")))
+# def sort_schedule_by_departure_time(schedule): return sorted(schedule, key=lambda bus: time_string_to_date(bus["departure_time"]))
