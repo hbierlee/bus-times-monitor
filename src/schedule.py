@@ -1,3 +1,4 @@
+import os
 import os.path
 import csv
 import time
@@ -5,7 +6,7 @@ import operator
 
 UPPSALA_POLACKSBACKEN_STOP_ID = "740012548"
 
-DATA_PATH = os.path.join("../data/")
+DATA_PATH = os.path.join(os.path.dirname(__file__), '../data')
 STOP_TIMES_PATH = os.path.join(DATA_PATH, "stop_times.txt")
 TRIPS_PATH = os.path.join(DATA_PATH, "trips.txt")
 ROUTES_PATH = os.path.join(DATA_PATH, "routes.txt")
