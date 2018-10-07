@@ -28,12 +28,5 @@ def is_service_available_for_date(service_id, services, date=datetime.date.today
     return service_id in services and date.strftime("%Y%m%d") in services[service_id]
 
 
-# schedule = read_schedule()
-# service_ids = set([bus["service_id"] for bus in schedule])
-# print(service_ids)
-# services = get_services(service_ids)
-# print(is_service_available_for_date("000004", services))
-# print(services["000001"])
-
 # TODO possibly could also omit calendar_dates that are in the past
-# use bisect to search efficiently through sorted list
+# TODO use bisect to search efficiently through sorted list in is_service_available_for_date

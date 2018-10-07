@@ -27,6 +27,7 @@ SCHEDULE_FIELDNAMES = [
 
 def get_schedule_filename(): return "schedule-" + str(int(time.time())) + ".csv"
 
+
 def write_csv_file(destination, fieldnames, rows):
     with open(destination, 'w') as file:
         writer = csv.DictWriter(file, fieldnames=fieldnames)
@@ -61,6 +62,7 @@ def inner_join_file_to_schedule(schedule, path, key):
             bus.update(routeEntry["other"])
         return schedule
 
+
 def create_schedule(stop_id=UPPSALA_POLACKSBACKEN_STOP_ID):
     # read and join data
     print("create_schedule")
@@ -78,11 +80,11 @@ def create_schedule(stop_id=UPPSALA_POLACKSBACKEN_STOP_ID):
 
     return schedule
 
-def read_schedule(path=SCHEDULES_FOLDER_PATH):
-    with open(os.path.join(path, "schedule-1538856523.csv")) as file: # TODO get latest schedule
+
+def read_schedule(filename="schedule-1538856523.csv"):
+    with open(os.path.join(SCHEDULES_FOLDER_PATH, filename)) as file:  # TODO get latest schedule
         schedule = csv.DictReader(file, delimiter=',')
         return list(schedule)
-
 
 
 # schedule = create_schedule()
@@ -91,10 +93,9 @@ def read_schedule(path=SCHEDULES_FOLDER_PATH):
 
 # read_calendar_dates_for_service_ids(map(lambda bus: bus["service_id"], schedule))
 
-# TODO rename file to schedule.py
 # TODO rename bus vars to trip ?
 # TODO old, probably remove
-# def time_string_to_date(time_string): 
+# def time_string_to_date(time_string):
 #     time_string = map(int, time_string.split(":"))
 #     while (time_string[0] > 23): time_string[0] = time_string[0] - 24 remove
 #     return datetime.time(*time_string)
