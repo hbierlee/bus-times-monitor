@@ -33,6 +33,7 @@ def start_bus_pole():
         bus = schedule[index_of_next_departing_bus]
         departure_time = time_string_to_date(bus["departure_time"])
         from_now = minutes_from_now(departure_time)
+        from_now = 0 if (from_now == 1439) else from_now
 
         print("[{}] The next bus ({} to {}) leaves in {} minute(s) from now (trip_id: {})".format(
             datetime.datetime.now(), bus["route_short_name"], bus["trip_headsign"], from_now, bus["trip_id"]))
@@ -54,7 +55,6 @@ def find_index_of_next_departing_bus(schedule, services, now=None):
 
     index = -1
     time_string = get_time_as_string(now)
-    print(time_string)
     for index, bus in enumerate(schedule):
         if bus["departure_time"] >= time_string and is_service_available_for_date(bus["service_id"], services, now.date()):
             return index
