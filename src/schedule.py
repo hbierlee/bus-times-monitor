@@ -75,7 +75,7 @@ def create_schedule(stop_id=UPPSALA_POLACKSBACKEN_STOP_ID):
     inner_join_file_to_schedule(schedule, ROUTES_PATH, "route_id")
 
     # clean and sort data
-    schedule = map(lambda bus: sub_dict(bus, SCHEDULE_FIELDNAMES), schedule)
+    schedule = list(map(lambda bus: sub_dict(bus, SCHEDULE_FIELDNAMES), schedule))
     for bus in schedule:  # add zero padding to hours
         if len(bus["departure_time"].split(":")[0]) == 1:
             bus["departure_time"] = "0" + bus["departure_time"]
