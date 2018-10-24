@@ -44,9 +44,9 @@ def sub_dict(somedict, somekeys, default=None):
 
 
 def get_stop_times_for_stop_id(stop_id, stop_times_path=STOP_TIMES_PATH):
-    with open(stop_times_path, 'rb') as csvfile:
+    with open(stop_times_path) as csvfile:
         stop_times = csv.DictReader(csvfile, delimiter=',')
-        return filter(lambda row: row['stop_id'] == stop_id, stop_times)
+        return list(filter(lambda row: row['stop_id'] == stop_id, stop_times))
 
 
 def inner_join_file_to_schedule(schedule, path, key):
