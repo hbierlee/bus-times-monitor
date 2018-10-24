@@ -1,0 +1,27 @@
+{
+  "A": [{
+    "route_short_name": "4",
+    "trip_headsign": "Uppsala Timjansgatan"
+  }, {
+    "route_short_name": "4",
+    "trip_headsign": "Uppsala Centralstation"
+  }],
+  "B": [{
+    "route_short_name": "4",
+    "trip_headsign": "Gottsunda Cellovägen"
+  }, {
+    "route_short_name": "4",
+    "trip_headsign": "Gottsunda centrum"
+  }, {
+    "route_short_name": "4",
+    "trip_headsign": "Uppsala Campus Ultuna"
+  }],
+  "C": [{
+    "route_short_name": "12",
+    "trip_headsign": "Uppsala Naturstensvägen"
+  }],
+  "D": [{
+    "route_short_name": "12",
+    "trip_headsign": "Uppsala Lundellska skolan"
+  }]
+}

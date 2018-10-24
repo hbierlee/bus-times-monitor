@@ -3,6 +3,8 @@ import os.path
 import csv
 import time
 import operator
+import itertools
+import json
 
 UPPSALA_POLACKSBACKEN_STOP_ID = "740012548"
 
@@ -12,6 +14,8 @@ TRIPS_PATH = os.path.join(DATA_PATH, "trips.txt")
 ROUTES_PATH = os.path.join(DATA_PATH, "routes.txt")
 CALENDAR_PATH = os.path.join(DATA_PATH, "calendar.txt")
 CALENDAR_DATES_PATH = os.path.join(DATA_PATH, "calendar_dates.txt")
+
+QUADRANTS_CONFIG_PATH = os.path.join(os.path.dirname(__file__), 'quadrants.json')
 TIMEZONE = "Europe/Stockholm"
 
 SCHEDULES_FOLDER_PATH = os.path.join(DATA_PATH, "schedules/")
@@ -86,12 +90,34 @@ def read_schedule(filename="schedule-1538856523.csv"):
         schedule = csv.DictReader(file, delimiter=',')
         return list(schedule)
 
+def group_schedule_on_route_descriptions(schedule):
+    keyfunc = lambda bus: (bus["route_short_name"], bus["trip_headsign"])
 
-# schedule = create_schedule()
-# write_csv_file(os.path.join(SCHEDULES_FOLDER_PATH, get_schedule_filename()), SCHEDULE_FIELDNAMES, schedule)
-# schedule = read_schedule()
+    schedule_by_route = {}
+    for key, rows in itertools.groupby(sorted(schedule, key=keyfunc), key=keyfunc):
+        schedule_by_route[key] = list(rows)
 
-# read_calendar_dates_for_service_ids(map(lambda bus: bus["service_id"], schedule))
+    return schedule_by_route
+
+def merge_schedule_by_route(schedule_by_route, quadrants):
+    schedule_by_quadrant = {"A": [], "B": [], "C": [], "D": []}
+    for quadrant_key, route_descriptions in quadrants.items():
+        for route_description in route_descriptions:
+            schedule_by_quadrant[quadrant_key] = schedule_by_quadrant[quadrant_key] + schedule_by_route[(route_description["route_short_name"], route_description["trip_headsign"])]
+        schedule_by_quadrant[quadrant_key] = sorted(schedule_by_quadrant[quadrant_key], key=operator.itemgetter("departure_time"))
+    return schedule_by_quadrant
+
+def read_quadrants_config(path=QUADRANTS_CONFIG_PATH):
+    with open(path) as file:
+        return json.load(file)
+
+def init_schedule_by_quadrant():
+    schedule = read_schedule()
+    schedule_by_route = group_schedule_on_route_descriptions(schedule)
+    quadrants = read_quadrants_config()
+    schedule_by_quadrant = merge_schedule_by_route(schedule_by_route, quadrants)
+    return schedule_by_quadrant
+
 
 # TODO rename bus vars to trip ?
 # TODO old, probably remove
