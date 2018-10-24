@@ -85,12 +85,8 @@ def display_fourth(a):
             sense.set_pixel(i, j, a[counter])
             counter += 1
 
-
-def main():
-    display_first(busA(5))
-    display_second(busB(5))
-    display_third(busC(8))
-    display_fourth(busD(11))
-
-if __name__ == '__main__':
-    main()
+def display(timeA, timeB, timeC, timeD):
+    display_first(busA(timeA))
+    display_second(busB(timeB))
+    display_third(busC(timeC))
+    display_fourth(busD(timeD))
