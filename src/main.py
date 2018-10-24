@@ -38,6 +38,9 @@ def start_bus_pole():
 
 def find_next_departing_bus(schedule, services):
     index = find_index_of_next_departing_bus(schedule, services)
+    if index is -1:
+        return 0
+    
     bus = schedule[index]
     departure_time = time_string_to_date(bus["departure_time"])
     from_now = minutes_from_now(departure_time)
@@ -64,7 +67,13 @@ def find_index_of_next_departing_bus(schedule, services, now=None):
         if bus["departure_time"] >= time_string and is_service_available_for_date(bus["service_id"], services, now.date()):
             return index
 
-    print("no bus found")
+    # If all buses have gone for this day, find first available morning bus
+    for index, bus in enumerate(schedule):
+        if is_service_available_for_date(bus["service_id"], services, now.date()):
+            return index
+        
+    # No bus found, disable quadrant
+    return -1
 
 
 start_bus_pole()
