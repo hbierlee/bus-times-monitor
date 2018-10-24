@@ -3,7 +3,6 @@ import datetime
 
 from schedule import init_schedule_by_quadrant
 from service import get_services_for_schedule, is_service_available_for_date
-# from display import display
 
 
 def get_time_as_string(datetime):
@@ -21,8 +20,12 @@ def start_bus_pole():
 
         print(value_by_quadrant)
 
-        # display(value_by_quadrant["A"], value_by_quadrant["B"],
-        #         value_by_quadrant["C"], value_by_quadrant["D"])
+        try:
+            from display import display
+            display(value_by_quadrant["A"], value_by_quadrant["B"],
+                    value_by_quadrant["C"], value_by_quadrant["D"])
+        except ImportError:
+            print('SenseHAT module not found, not displaying.')
 
 
 
